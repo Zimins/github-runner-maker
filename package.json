@@ -1,0 +1,15 @@
+{
+  "name": "runnermaker",
+  "version": "1.0.0",
+  "description": "Script for make Github self-hosted runner by docker",
+  "main": "index.js",
+  "scripts": {
+    "addRunner": "node index.js",
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^18.12.0",
+    "child_process": "^1.0.2"
+  }
+}
