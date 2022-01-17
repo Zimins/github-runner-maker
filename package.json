@@ -4,7 +4,7 @@
   "description": "Script for make Github self-hosted runner by docker",
   "main": "index.js",
   "scripts": {
-    "addRunner": "node index.js",
+    "addRunner": "node index.js"
   },
   "author": "",
   "license": "ISC",
