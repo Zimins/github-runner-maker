@@ -14,7 +14,7 @@ if (runnerName == undefined) {
 const config = require('./config.json');
 
 const host = config.host;
-const apiUrl = config.githubApiUrl;
+const apiUrl = config.apiUrl;
 const githubPAT = config.githubPAT;
 const ownerName = config.ownerName;
 const repoName = config.repoName;
@@ -61,14 +61,24 @@ function runDocker(runnerName, repoToken) {
   -v /tmp/github-runner-${runnerName}:/tmp/github-runner-${repoName} \
   myoung34/github-runner:latest
     `;
-
-  exec(script, (error, stdout, stderr) => {
-    console.log(stdout);
-    console.log(stderr);
-    if (error !== null) {
-      console.log(`exec error: ${error}`);
-    }
-  });
+  console.log(script);
+  if (process.platform == "win32") {
+    exec(script, { 'shell': 'powershell.exe' },  (error, stdout, stderr) => {
+      console.log(stdout);
+      console.log(stderr);
+      if (error !== null) {
+        console.log(`exec error: ${error}`);
+      }
+    });
+  } else {
+    exec(script, (error, stdout, stderr) => {
+      console.log(stdout);
+      console.log(stderr);
+      if (error !== null) {
+        console.log(`exec error: ${error}`);
+      }
+    });
+  }
 }
 
 async function addNewRunner(runnerName) {
