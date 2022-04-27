@@ -20,8 +20,8 @@ You need 5 parameters.
     "host": "github.com",
     "apiUrl": "https://api.github.com",
     "githubPAT": "your personal access token",
-    "owneName": "zimins",
-    "repoName": "fun-repository" 
+    "ownerName": "zimins", // your name 
+    "repoName": "fun-repository"  // target respository name
 }
 ```
 
