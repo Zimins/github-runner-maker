@@ -1,5 +1,5 @@
 const { Octokit } = require("@octokit/rest");
-const { exec } = require("child_process");
+const { exec, spawn } = require("child_process");
 const { connected } = require("process");
 
 const args = process.argv.slice(2);
@@ -20,7 +20,7 @@ const ownerName = config.ownerName;
 const repoName = config.repoName;
 
 const haveConfigError = [githubPAT, ownerName, repoName].some((element) => {
-    element == undefined || element == null || typeof element != "string"
+  element == undefined || element == null || typeof element != "string"
 });
 
 console.log(`configError: ${haveConfigError}`);
@@ -62,21 +62,34 @@ function runDocker(runnerName, repoToken) {
   myoung34/github-runner:latest
     `;
   console.log(script);
+
   if (process.platform == "win32") {
-    exec(script, { 'shell': 'powershell.exe' },  (error, stdout, stderr) => {
-      console.log(stdout);
-      console.log(stderr);
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-      }
+    const runnerSpawn = spawn(script, { 'shell' : 'powershell.exe'});
+
+    runnerSpawn.stdout.on('data', (data) => {
+      console.log(data);
+    });
+
+    runnerSpawn.stderr.on('data', (data) => {
+      console.error(`Make runner error: ${data}`);
+    });
+
+    runnerSpawn.on('close', (code) => {
+      console.log(`Make runner process exited with code ${code}`);
     });
   } else {
-    exec(script, (error, stdout, stderr) => {
-      console.log(stdout);
-      console.log(stderr);
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-      }
+      const runnerSpawn = spawn(script);
+
+    runnerSpawn.stdout.on('data', (data) => {
+      console.log(data);
+    });
+
+    runnerSpawn.stderr.on('data', (data) => {
+      console.error(`Make runner error: ${data}`);
+    });
+
+    runnerSpawn.on('close', (code) => {
+      console.log(`Make runner process exited with code ${code}`);
     });
   }
 }
